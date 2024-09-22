@@ -1,0 +1,70 @@
+<div class="task-form"> 
+  <h2>New Task</h2>
+  <form #taskForm="ngForm" (ngSubmit)="saveTask(taskForm)">
+   
+    <label for="assignedTo">Assigned To:<span style="color: red;"> *</span></label>
+    <input 
+      type="text" 
+      [(ngModel)]="task.assignedTo" 
+      name="assignedTo" 
+      required 
+      #assignedTo="ngModel" 
+      class="form-control">
+    <div *ngIf="assignedTo.invalid && assignedTo.touched" class="error">
+      <small *ngIf="assignedTo.errors?.['required']">Assigned To is required.</small>
+    </div>
+ 
+    <label for="status">Status:<span style="color: red;"> *</span></label>
+    <select 
+      [(ngModel)]="task.status" 
+      name="status" 
+      required 
+      #status="ngModel"
+      class="form-control">
+      <option value="Not Started">Not Started</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Completed">Completed</option>
+    </select>
+    <div *ngIf="status.invalid && status.touched" class="error">
+      <small *ngIf="status.errors?.['required']">Status is required.</small>
+    </div>
+  
+    <label for="dueDate">Due Date:<span style="color: red;"> *</span></label>
+    <input 
+      type="date" 
+      [(ngModel)]="task.dueDate" 
+      name="dueDate" 
+      required 
+      #dueDate="ngModel"
+      class="form-control">
+    <div *ngIf="dueDate.invalid && dueDate.touched" class="error">
+      <small *ngIf="dueDate.errors?.['required']">Due Date is required.</small>
+    </div>
+
+     <label for="priority">Priority:<span style="color: red;"> *</span></label>
+     <select 
+       [(ngModel)]="task.priority" 
+       name="priority" 
+       required 
+       #priority="ngModel"
+       class="form-control">
+       <option value="" disabled selected>Select Priority</option>
+       <option value="Low">Low</option>
+       <option value="Normal">Normal</option>
+       <option value="High">High</option>
+     </select>
+     <div *ngIf="priority.invalid && priority.touched" class="error">
+       <small *ngIf="priority.errors?.['required']">Priority is required.</small>
+     </div>
+
+    <label for="comments">Comments:</label>
+    <textarea 
+      [(ngModel)]="task.comments" 
+      name="comments" 
+      #comments="ngModel" 
+      class="form-control"></textarea>
+
+    <button type="submit" [disabled]="taskForm.invalid" class="btn btn-primary">Save</button>
+    <button type="button" (click)="cancelTask()" class="btn btn-secondary">Cancel</button>
+  </form>
+</div>

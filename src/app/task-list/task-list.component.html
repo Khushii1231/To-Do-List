@@ -1,0 +1,93 @@
+<div class="header">
+  <div class="header-left">
+    <div class="logo-container">
+      <img src="assets/Enzigma.png" alt="Enzigma Logo" />
+    </div>
+    <div class="task-title">
+      <h2>Tasks</h2>
+      <h3>All Tasks</h3>
+      <span>{{ tasks.length }} records</span>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <button class="btn new-task-btn" (click)="openTaskForm()">New Task</button>
+    <button class="btn refresh-btn" (click)="refreshTasks()">Refresh</button>
+    <div class="search-box">
+      <input type="text" placeholder="Search" [(ngModel)]="searchTerm" (input)="filterTasks()" />
+      <button class="search-btn">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Task List Table -->
+<div class="task-list">
+  <table>
+    <thead>
+      <tr>
+        <th>Assigned To</th>
+        <th>Status</th>
+        <th>Due Date</th>
+        <th>Priority</th>
+        <th>Comments</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of filteredTasks">
+        <td data-label="Assigned To">{{task.assignedTo}}</td>
+        <td data-label="Status">{{task.status}}</td>
+        <td data-label="Due Date">{{task.dueDate}}</td>
+        <td data-label="Priority">{{task.priority}}</td>
+        <td data-label="Comments">{{task.comments}}</td>
+        <td data-label="Actions">
+          <button class="edit" (click)="editTask(task)">Edit</button>
+          <button class="delete" (click)="deleteTask(task.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal for New Task or Edit Task -->
+<div *ngIf="showTaskForm" class="modal">
+  <div class="modal-content">
+    <span class="close" (click)="closeTaskForm()">&times;</span>
+    <app-task-form 
+      [task]="currentTask" 
+      [isEditing]="isEditing" 
+      (formCancelled)="closeTaskForm()"
+      (formSubmitted)="refreshTasks(); closeTaskForm()"> <!-- Call refresh and close modal on form submit -->
+    </app-task-form>
+  </div>
+</div>
+
+
+<!-- Delete Confirmation Modal -->
+<div *ngIf="showDeleteModal" class="modal">
+  <div class="modal-content">
+    <h2 class="modal-header" style="background-color: #d9534f; color: white;">Delete</h2>
+    <p>Do you want to delete task "{{ currentTask.assignedTo }}"?</p>
+    <div class="modal-actions">
+      <button class="btn" (click)="confirmDelete(false)">No</button>
+      <button class="btn btn-danger" (click)="confirmDelete(true)">Yes</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="footer-pagination">
+  <div class="footer-left">
+    <input type="number" [(ngModel)]="tasksPerPage" (ngModelChange)="updateFilteredTasks()" />
+  </div>
+  <div class="footer-right">
+    <button (click)="goToFirstPage()">First</button>
+    <button (click)="goToPrevPage()">Prev</button>
+    <span>{{ currentPage }} / {{ totalPages }}</span>
+    <button (click)="goToNextPage()">Next</button>
+    <button (click)="goToLastPage()">Last</button>
+  </div>
+</div>
+
